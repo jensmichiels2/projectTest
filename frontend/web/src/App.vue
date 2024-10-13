@@ -1,24 +1,26 @@
 <template>
-  <div id="app" class="container">
+  <div id="app" class="">
     <h1 class="text-center mt-4">ZEEHOND</h1>
-    <div class="chat-container">
-      <div class="chat-box">
-        <div v-for="(msg, index) in messages" :key="index" class="message" :class="{ 'user-message': msg.fromUser, 'bot-message': !msg.fromUser }">
-          <p>{{ msg.text }}</p>
+    <div class="row mt-4" style="height: calc(100vh - 100px);">
+      <div class="jira-container col-3">
+        <h2>Jira Tickets</h2>
+        <ul class="list-group">
+          <li v-for="ticket in jiraTickets" :key="ticket.key" class="list-group-item">
+            <strong>{{ ticket.key }}</strong>: {{ ticket.summary }}
+          </li>
+        </ul>
+      </div>
+      <div class="chat-container col-9">
+        <div class="chat-box">
+          <div v-for="(msg, index) in messages" :key="index" class="message" :class="{ 'user-message': msg.fromUser, 'bot-message': !msg.fromUser }">
+            <p>{{ msg.text }}</p>
+          </div>
+        </div>
+        <div class="input-container">
+          <input v-model="question" @keyup.enter="askChatGPT" class="form-control" placeholder="Type your question..." />
+          <button @click="askChatGPT" class="btn btn-primary mt-2">Send</button>
         </div>
       </div>
-      <div class="input-container">
-        <input v-model="question" @keyup.enter="askChatGPT" class="form-control" placeholder="Type your question..." />
-        <button @click="askChatGPT" class="btn btn-primary mt-2">Send</button>
-      </div>
-    </div>
-    <div class="jira-container">
-      <h2 class="text-center mt-4">Jira Tickets</h2>
-      <ul>
-        <li v-for="ticket in jiraTickets" :key="ticket.key">
-          <strong>{{ ticket.key }}</strong>: {{ ticket.summary }}
-        </li>
-      </ul>
     </div>
   </div>
 </template>
@@ -31,7 +33,7 @@ export default {
     return {
       question: '',
       messages: [],
-      jiraTickets: []  // Initialize the jiraTickets array
+      jiraTickets: [] // Initialize the jiraTickets array
     };
   },
   methods: {
@@ -56,7 +58,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchJiraTickets();  // Fetch tickets when the component is mounted
+    this.fetchJiraTickets(); // Fetch tickets when the component is mounted
   }
 };
 </script>
@@ -66,12 +68,18 @@ export default {
   margin-top: 20px;
 }
 
-.chat-container {
-  border: 1px solid #ced4da;
-  border-radius: 5px;
-  padding: 20px;
-  height: 400px;
+.jira-container {
+  height: calc(100vh - 100px); /* Full height minus header */
   overflow-y: auto;
+  border-right: 1px solid #ced4da;
+  background-color: #f8f9fa;
+}
+
+.chat-container {
+  height: calc(100vh - 100px); /* Full height minus header */
+  width: 1000px;
+  overflow-y: auto;
+  padding: 20px;
   background-color: #f8f9fa;
 }
 
@@ -104,11 +112,15 @@ input {
   width: 100%;
 }
 
-.jira-container {
-  margin-top: 20px;
-  padding: 20px;
-  border: 1px solid #ced4da;
-  border-radius: 5px;
-  background-color: #f8f9fa;
+.list-group-item {
+  cursor: pointer;
+}
+
+.list-group-item:hover {
+  background-color: #e2e6ea;
 }
 </style>
+
+
+
+
